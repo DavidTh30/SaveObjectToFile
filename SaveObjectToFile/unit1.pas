@@ -5,7 +5,7 @@ unit Unit1;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
 
 type
 
@@ -16,7 +16,9 @@ type
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
-    Label1_: TLabel;
+    Image1: TImage;
+    ImageList1: TImageList;
+    Label1: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -30,7 +32,6 @@ type
 
 var
   Form1: TForm1;
-  Label3:Tlabel;
 
 implementation
 
@@ -50,54 +51,67 @@ begin
   Result := ReadComponentResFile(AFileName, nil);
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
-var
-  Label2:TComponent;
+procedure LoadFromImageList(AImage: TImage; AList: TImageList; ImgIdx: Integer);
 begin
-  Label2:=TComponent.Create(nil);
-  //WriteComponentResFile('123.obj',Label1_);  //Not work
-  WriteComponentResFile('123.obj',Label1_);
-  //WriteComponentResFile('123.obj',Label2 as TComponent );
-  FreeAndNil(Label2);
-  FreeAndNil(Label1_);
+  if (AList <> nil) and (ImgIdx >= 0) and (ImgIdx < AList.Count) then
+    AList.GetBitmap(ImgIdx, AImage.Picture.Bitmap) // Directly populates the target image
+  else
+    AImage.Picture.Clear; // Clears the image if the index doesn't exist
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  if Label1 = nil then exit;
+  WriteComponentResFile('Label.obj',Label1);
+  FreeAndNil(Label1);
+
+  if Image1 = nil then exit;
+  LoadFromImageList(Image1, ImageList1, 0);
+  WriteComponentResFile('Image.obj',Image1);
+  FreeAndNil(Image1);
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  if Label3 <> nil then exit;
-  Label3:= ReadComponentResFile('123.obj',nil) as Tlabel;
-  Label3.Parent := Form1;
-  //Label3.Visible:=true;
-  //Label3.Top:=5;
-  //Label3.Left:=5;
-  //showmessage(Label3.Name+ ' '+ Label3.Caption);
-  //Label2:=Tlabel(TComponent);
-  //Label2:=Tlabel.Create(self);
-  //FreeAndNil(Label3);
+  if Label1 <> nil then FreeAndNil(Label1);
+  Label1:= ReadComponentResFile('Label.obj',nil) as Tlabel;
+  Label1.Parent := Form1;
+
+  if Image1 <> nil then FreeAndNil(Image1);
+  Image1:= ReadComponentResFile('Image.obj',nil) as TImage;
+  Image1.Parent := Form1;
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);
-var
-  Label2:TComponent;
 begin
-  Label2:= ReadComponentResFile('123.obj',nil).Create(nil);
-  FreeAndNil(Label2);
+  if Label1 <> nil then FreeAndNil(Label1);
+  Label1:= Tlabel(ReadComponentResFile('Label.obj',nil));
+  Label1.Parent := Form1;
+
+  if Image1 <> nil then FreeAndNil(Image1);
+  Image1:= TImage(ReadComponentResFile('Image.obj',nil));
+  Image1.Parent := Form1;
 end;
 
 procedure TForm1.Button4Click(Sender: TObject);
-var
-  Label2:TCustomLabel;
 begin
-  Label2:=TLabel(ReadComponentResFile('123.obj',nil)).Create(nil);
+  if Label1 <> nil then FreeAndNil(Label1);
+  Label1:=TLabel(ReadComponentResFile('Label.obj',TLabel.Create(self)));
+  Label1.Parent := Form1;
+
+  if Image1 <> nil then FreeAndNil(Image1);
+  Image1:=TImage(ReadComponentResFile('Image.obj',TImage.Create(self)));
+  Image1.Parent := Form1;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  if Label3 <> nil then FreeAndNil(Label3);
+  if Label1 <> nil then FreeAndNil(Label1);
+  if Image1 <> nil then FreeAndNil(Image1);
 end;
 
 initialization
-  RegisterClasses([TForm1,Tlabel]);
+  RegisterClasses([TForm1,TLabel,TCustomLabel,TImage]);
 
 end.
 

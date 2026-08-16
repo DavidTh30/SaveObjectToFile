@@ -17,6 +17,7 @@ uses
 
 begin
   RequireDerivedFormResource:=True;
+  Application.Title:='Object to file / File to Object';
   Application.Scaled:=True;
   {$PUSH}{$WARN 5044 OFF}
   Application.MainFormOnTaskbar:=True;
