@@ -16,6 +16,7 @@ type
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
+    CmdClear: TButton;
     Image1: TImage;
     ImageList1: TImageList;
     Label1: TLabel;
@@ -23,6 +24,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+    procedure CmdClearClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
   private
 
@@ -73,6 +75,12 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
+  if (not FileExists('Label.obj')) or (not FileExists('Image.obj')) then
+  begin
+    showmessage('File not exists');
+    exit;
+  end;
+
   if Label1 <> nil then FreeAndNil(Label1);
   Label1:= ReadComponentResFile('Label.obj',nil) as Tlabel;
   Label1.Parent := Form1;
@@ -84,6 +92,12 @@ end;
 
 procedure TForm1.Button3Click(Sender: TObject);
 begin
+  if (not FileExists('Label.obj')) or (not FileExists('Image.obj')) then
+  begin
+    showmessage('File not exists');
+    exit;
+  end;
+
   if Label1 <> nil then FreeAndNil(Label1);
   Label1:= Tlabel(ReadComponentResFile('Label.obj',nil));
   Label1.Parent := Form1;
@@ -95,6 +109,12 @@ end;
 
 procedure TForm1.Button4Click(Sender: TObject);
 begin
+  if (not FileExists('Label.obj')) or (not FileExists('Image.obj')) then
+  begin
+    showmessage('File not exists');
+    exit;
+  end;
+
   if Label1 <> nil then FreeAndNil(Label1);
   Label1:=TLabel(ReadComponentResFile('Label.obj',TLabel.Create(self)));
   Label1.Parent := Form1;
@@ -102,6 +122,12 @@ begin
   if Image1 <> nil then FreeAndNil(Image1);
   Image1:=TImage(ReadComponentResFile('Image.obj',TImage.Create(self)));
   Image1.Parent := Form1;
+end;
+
+procedure TForm1.CmdClearClick(Sender: TObject);
+begin
+  if Label1 <> nil then FreeAndNil(Label1);
+  if Image1 <> nil then FreeAndNil(Image1);
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);

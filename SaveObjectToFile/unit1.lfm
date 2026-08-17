@@ -3,17 +3,19 @@ object Form1: TForm1
   Height = 227
   Top = 175
   Width = 339
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'Object to file / File to Object'
   ClientHeight = 227
   ClientWidth = 339
+  LCLVersion = '4.4.0.0'
   OnClose = FormClose
-  LCLVersion = '3.4.0.0'
   object Label1: TLabel
-    Left = 160
+    Left = 176
     Height = 15
-    Top = 24
-    Width = 28
-    Caption = 'Hello'
+    Top = 48
+    Width = 64
+    Caption = 'Hello object'
   end
   object Button1: TButton
     Left = 208
@@ -27,7 +29,7 @@ object Form1: TForm1
   object Button2: TButton
     Left = 32
     Height = 25
-    Top = 16
+    Top = 48
     Width = 102
     Caption = 'File to Object'
     TabOrder = 1
@@ -36,7 +38,7 @@ object Form1: TForm1
   object Button3: TButton
     Left = 32
     Height = 25
-    Top = 48
+    Top = 80
     Width = 102
     Caption = 'File to Object'
     TabOrder = 2
@@ -45,7 +47,7 @@ object Form1: TForm1
   object Button4: TButton
     Left = 32
     Height = 25
-    Top = 80
+    Top = 112
     Width = 102
     Caption = 'File to Object'
     TabOrder = 3
@@ -57,11 +59,20 @@ object Form1: TForm1
     Top = 67
     Width = 128
   end
+  object CmdClear: TButton
+    Left = 32
+    Height = 25
+    Top = 14
+    Width = 102
+    Caption = 'Clear'
+    TabOrder = 4
+    OnClick = CmdClearClick
+  end
   object ImageList1: TImageList
     Height = 128
     Width = 128
-    Left = 32
-    Top = 128
+    Left = 272
+    Top = 160
     Bitmap = {
       4C7A010000008000000080000000EF4000000000000078DAED7D07941DD959A6
       ED312CB0E6B00B6777D9E500B63138C178A2155AEAF8BA5FCEB973CE0A1DD4DD
