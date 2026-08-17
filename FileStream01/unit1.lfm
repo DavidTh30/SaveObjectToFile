@@ -8,8 +8,9 @@ object Form1: TForm1
   Caption = 'Form1'
   ClientHeight = 325
   ClientWidth = 565
+  OnClose = FormClose
   Position = poWorkAreaCenter
-  LCLVersion = '4.4.0.0'
+  LCLVersion = '3.4.0.0'
   object Button1: TButton
     Left = 336
     Height = 29
@@ -31,14 +32,14 @@ object Form1: TForm1
   object Label1: TLabel
     Left = 336
     Height = 15
-    Top = 112
+    Top = 232
     Width = 34
     Caption = 'Label1'
   end
   object Label2: TLabel
     Left = 336
     Height = 15
-    Top = 128
+    Top = 248
     Width = 34
     Caption = 'Label2'
   end
@@ -108,10 +109,28 @@ object Form1: TForm1
   object Button10: TButton
     Left = 336
     Height = 29
-    Top = 152
+    Top = 272
     Width = 187
     Caption = 'Clear'
     TabOrder = 9
     OnClick = Button10Click
+  end
+  object Button11: TButton
+    Left = 336
+    Height = 29
+    Top = 116
+    Width = 187
+    Caption = 'SaveOBJ+Str+IntToStream'
+    TabOrder = 10
+    OnClick = Button11Click
+  end
+  object Button12: TButton
+    Left = 336
+    Height = 29
+    Top = 152
+    Width = 187
+    Caption = 'Read'
+    TabOrder = 11
+    OnClick = Button12Click
   end
 end

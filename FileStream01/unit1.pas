@@ -14,6 +14,8 @@ type
   TForm1 = class(TForm)
     Button1: TButton;
     Button10: TButton;
+    Button11: TButton;
+    Button12: TButton;
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
@@ -25,6 +27,8 @@ type
     Label1: TLabel;
     Label2: TLabel;
     procedure Button10Click(Sender: TObject);
+    procedure Button11Click(Sender: TObject);
+    procedure Button12Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -34,6 +38,7 @@ type
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
   private
 
   public
@@ -128,8 +133,80 @@ end;
 
 procedure TForm1.Button10Click(Sender: TObject);
 begin
+  if Label1 = nil then exit;
+  if Label2 = nil then exit;
   Label1.Caption:= '';
   Label2.Caption:= '';
+end;
+
+procedure TForm1.Button11Click(Sender: TObject);
+var
+  FileStream: TFileStream;
+  Buffer1: array of Byte; // Dynamic array
+  Buffer2: array of Byte; // Dynamic array
+  i:integer;
+begin
+  if Label1 = nil then exit;
+  if Label2 = nil then exit;
+
+  Label1.Caption:='Hello';
+  WriteComponentResFile('Label.obj',Label1);
+  FreeAndNil(Label1);
+
+  Label2.Caption:='Hello';
+  WriteComponentResFile('Labe2.obj',Label2);
+  FreeAndNil(Label2);
+
+  if not FileExists('Label.obj') then
+  begin
+    showmessage('Label.obj not exists');
+    Exit;
+  end;
+
+  if not FileExists('Labe2.obj') then
+  begin
+    showmessage('Labe2.obj not exists');
+    Exit;
+  end;
+
+  FileStream := TFileStream.Create('Label.obj', fmOpenRead);
+  try
+    if FileStream.Size > 0 then
+    begin
+      SetLength(Buffer1, FileStream.Size);
+      FileStream.ReadBuffer(Buffer1[0], FileStream.Size);
+    end;
+  finally
+    FileStream.Free;
+  end;
+
+  FileStream := TFileStream.Create('Labe2.obj', fmOpenRead);
+  try
+    if FileStream.Size > 0 then
+    begin
+      SetLength(Buffer2, FileStream.Size);
+      FileStream.ReadBuffer(Buffer2[0], FileStream.Size);
+    end;
+  finally
+    FileStream.Free;
+  end;
+
+  FileStream := TFileStream.Create('test.bin', fmCreate);
+  try
+    FileStream.WriteBuffer(Buffer1[0], length(Buffer1)); //Save both stucture and value
+    FileStream.Seek(10, soCurrent);
+    FileStream.WriteBuffer(Buffer2[0], length(Buffer2));
+  finally
+    FileStream.Free;
+  end;
+
+  DeleteFile('Label.obj');
+  DeleteFile('Labe2.obj');
+end;
+
+procedure TForm1.Button12Click(Sender: TObject);
+begin
+
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -137,6 +214,8 @@ var
   FS: TFileStream;
   MyInteger: Integer;
 begin
+  if Label1 = nil then exit;
+  if Label2 = nil then exit;
 
   Label1.Caption:='Not found';
   Label1.Caption:='Not found';
@@ -167,6 +246,8 @@ var
   List: TStringList;
   FoundIndex: Integer;
 begin
+  if Label1 = nil then exit;
+  if Label2 = nil then exit;
 
   Label1.Caption:='Not found';
   Label1.Caption:='Not found';
@@ -200,6 +281,9 @@ var
   Line: String;
   Found: Boolean;
 begin
+  if Label1 = nil then exit;
+  if Label2 = nil then exit;
+
   Label1.Caption:='Not found';
   Label1.Caption:='Not found';
 
@@ -239,6 +323,9 @@ var
   TargetValue, CurrentValue: Integer;
   Found: Boolean;
 begin
+  if Label1 = nil then exit;
+  if Label2 = nil then exit;
+
   Label1.Caption:='Not found';
   Label1.Caption:='Not found';
 
@@ -351,6 +438,8 @@ var
   Buffer: array of Byte; // Dynamic array
   i:integer;
 begin
+  if Label1 = nil then exit;
+  if Label2 = nil then exit;
 
   Label1.Caption:='Not found';
   Label1.Caption:='Not found';
@@ -406,5 +495,13 @@ begin
   end;
 end;
 
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  if Label1 <> nil then FreeAndNil(Label1);
+  if Label2 <> nil then FreeAndNil(Label2);
+end;
+
 end.
 
+initialization
+  RegisterClasses([TForm1,TLabel,TCustomLabel,TImage]);
