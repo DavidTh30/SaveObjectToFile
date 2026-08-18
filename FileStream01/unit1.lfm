@@ -5,12 +5,12 @@ object Form1: TForm1
   Width = 565
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Form1'
+  Caption = 'Sample'
   ClientHeight = 325
   ClientWidth = 565
-  Position = poWorkAreaCenter
-  LCLVersion = '4.4.0.0'
   OnClose = FormClose
+  Position = poWorkAreaCenter
+  LCLVersion = '3.4.0.0'
   object Button1: TButton
     Left = 336
     Height = 29
@@ -129,15 +129,8 @@ object Form1: TForm1
     Height = 29
     Top = 152
     Width = 187
-    Caption = 'Read'
+    Caption = 'Read and unpack object'
     TabOrder = 11
     OnClick = Button12Click
-  end
-  object Label3: TLabel
-    Left = 264
-    Height = 15
-    Top = 160
-    Width = 73
-    Caption = 'Not finish -->'
   end
 end
