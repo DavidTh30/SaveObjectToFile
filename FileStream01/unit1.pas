@@ -26,6 +26,7 @@ type
     Button9: TButton;
     Label1: TLabel;
     Label2: TLabel;
+    Label3: TLabel;
     procedure Button10Click(Sender: TObject);
     procedure Button11Click(Sender: TObject);
     procedure Button12Click(Sender: TObject);
@@ -145,6 +146,8 @@ var
   Buffer1: array of Byte; // Dynamic array
   Buffer2: array of Byte; // Dynamic array
   i:integer;
+  Txt_:string;
+  MyValue:integer;
 begin
   if Label1 = nil then exit;
   if Label2 = nil then exit;
@@ -193,8 +196,18 @@ begin
 
   FileStream := TFileStream.Create('test.bin', fmCreate);
   try
-    FileStream.WriteBuffer(Buffer1[0], length(Buffer1)); //Save both stucture and value
     FileStream.Seek(10, soCurrent);
+    Txt_:='[Section1]';
+    MyValue:=length(Buffer1);
+    FileStream.WriteBuffer(Pointer(Txt_)^, length(Txt_)); //Save only string no stucture
+    FileStream.WriteBuffer(MyValue, SizeOf(MyValue)); //Save both stucture and value
+    FileStream.WriteBuffer(Buffer1[0], length(Buffer1)); //Save both stucture and value
+
+    FileStream.Seek(10, soCurrent);
+    Txt_:='[Section2]';
+    MyValue:=length(Buffer2);
+    FileStream.WriteBuffer(Pointer(Txt_)^, length(Txt_)); //Save only string no stucture
+    FileStream.WriteBuffer(MyValue, SizeOf(MyValue)); //Save both stucture and value
     FileStream.WriteBuffer(Buffer2[0], length(Buffer2));
   finally
     FileStream.Free;
@@ -205,8 +218,49 @@ begin
 end;
 
 procedure TForm1.Button12Click(Sender: TObject);
+var
+  FileStream: TFileStream;
+  Buffer: array of Byte; // Dynamic array
+  Arr1: array of Byte; //Arr1: array[1..ArraySize] of Byte = (1, 2, 3, 4, 5);
+  s2:string;
+  i:integer;
+  ObjectSize:integer;
 begin
 
+  if not FileExists('test.bin') then
+  begin
+    showmessage('File not exists');
+    Exit;
+  end;
+
+  Arr1:=BytesOf('[Section1]');
+  //SetString(s, PAnsiChar(@Arr1[0]), Length(Arr1)); //Array of byte to string
+
+  FileStream := TFileStream.Create('test.bin', fmOpenRead);
+  try
+    if FileStream.Size > 0 then
+    begin
+      SetLength(Buffer, FileStream.Size);
+      FileStream.ReadBuffer(Buffer[0], FileStream.Size);
+
+      for i := 0 to length(Buffer)-1 do
+      begin
+        Move(Buffer[i], Arr1[0], Length(Arr1)); //Transfer array of byte to array of byte
+        SetString(s2, PAnsiChar(@Arr1[0]), Length(Arr1)); //Array of byte to string
+        if '[Section1]'=s2 then
+        begin
+          Move(Buffer[i+11+1], ObjectSize, SizeOf(ObjectSize)); //Array of byte to integer
+          //Label1.Caption:=ObjectSize.ToString;
+          //Save Array of byte to Label.obj
+          break;
+        end;
+      end;
+
+    end;
+
+  finally
+    FileStream.Free;
+  end;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
